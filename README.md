@@ -10,22 +10,24 @@
 [Testing](#testing)  
 [Optimization](#optimization)
 
+
 # Introduction
 
-This text is about a tool for building **virtual graphs**.
+This text is about a [Go][golang] tool based entirely on functions –
+the API contains only immutable data types, and the implementation
+is built on top of a `struct` with five `func` fields.
 
-The library is primarily based on functions,
-all data structures in the API are immutable and
-the main data structure `build.Virtual` is implemented
-as a `struct` containing five `func` pointers.
+It's a tool for building **virtual graphs**.
+In a virtual graph no vertices or edges are stored in memory,
+they are instead computed as needed.
+The tool is part of a larger library of generic graph algorithms:
 
-The text comes with two [Go][golang] packages:
+- the package [graph][graph] contains the basic graph library and
+- the subpackage [graph/build][graphbuild] is the tool for building virtual graphs.
 
-- [github.com/yourbasic/graph][graph]
-  is a library of basic graph algorithms and
-- [github.com/yourbasic/graph/build][graphbuild]
-  is the tool for building virtual graphs.
-
+There is an online reference for the build tool at
+[godoc.org][graphbuilddoc].
+ 
 ### Petersen graph
 
 Let's start with an example, the Petersen graph:
@@ -34,26 +36,32 @@ Let's start with an example, the Petersen graph:
 
 *Picture from [Wikipedia][wikipetersen], [CC BY-SA 3.0][ccbysa30].*
 
-To describe this graph in your typical graph library,
-you need to somehow enter the edges  
-{0, 1}, {0, 4}, {0, 5}, {1, 2}, {1, 6}, {2, 3}, {2, 7}, {3, 4},
-{3, 8}, {4, 9}, {5, 7}, {5, 8}, {6, 8}, {6, 9}, and {7, 9}.
+To describe this graph in a conventional graph library,
+you would typically need to enumerate the edges
 
-If you ask a mathematcian to describe the Petersen graph,
-her answer would clearly be very different. Perhaps she would
-say that the Petersen graph is most commonly drawn as a pentagon
-with a pentagram inside, with five spokes.
+	{0, 1}, {0, 4}, {0, 5}, {1, 2}, {1, 6}, {2, 3}, {2, 7}, {3, 4},
+	{3, 8}, {4, 9}, {5, 7}, {5, 8}, {6, 8}, {6, 9}, and {7, 9}
+
+in one way or another.
+
+However, if you ask a mathematician to describe the Petersen graph,
+her answer would clearly be very different. Perhaps she would say:
+
+> You get a Petersen graph if you draw a pentagon
+> with a pentagram inside, with five spokes.
+
+This [example][petersendoc] from the `graph/build` documentation
+is very close to this mathematical description.
 
 ```go
+// Build a Petersen graph.
 pentagon := build.Cycle(5)
 pentagram := pentagon.Complement()
 petersen := pentagon.Match(pentagram, build.AllEdges())
 ```
-*Example from [godoc.org/github.com/yourbasic/graph/build][graphbuilddoc].*
 
-Virtual graphs are constructed by **composing** and **filtering**
-a set of **standard graphs**, or by writing
-**functions that describe the edges** of a graph. 
+As you can see, virtual graphs can be constructed by **composing** 
+a set of **standard graphs**.
 
 
 ## API
@@ -109,9 +117,10 @@ type Virtual struct {
 [func]: https://github.com/yourbasic/func
 [golang]: https://golang.org
 [graph]: https://github.com/yourbasic/graph
-[graphbuild]: https://github.com/yourbasic/graph/build
+[graphbuild]: https://github.com/yourbasic/graph/tree/master/build
 [graphdoc]: https://godoc.org/github.com/yourbasic/graph
 [graphbuilddoc]: https://godoc.org/github.com/yourbasic/graph/build
 [korthaj]: https://github.com/korthaj
+[petersendoc]: https://godoc.org/github.com/yourbasic/graph/build#example-Virtual-Match-Petersen
 [wikipetersen]: https://en.wikipedia.org/wiki/File:Petersen1_tiny.svg
 
