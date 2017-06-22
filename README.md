@@ -60,6 +60,41 @@ a set of **standard graphs**, or by writing
 
 ## Implementation
 
+```go
+type Virtual struct {
+	// The `order` field is, in fact, a constant function.
+	// It returns the number of vertices in the graph.
+	order int
+
+	// The `edge` and `cost` functions define a weighted graph without self-loops.
+	//
+	//  • edge(v, w) returns true whenever (v, w) belongs to the graph;
+	//    the value is disregarded when v == w.
+	//
+	//  • cost(v, w) returns the cost of (v, w);
+	//    the value is disregarded when edge(v, w) is false.
+	//
+	edge func(v, w int) bool
+	cost func(v, w int) int64
+
+	// The `degree` and `visit` functions can be used to improve performance.
+	// They MUST BE CONSISTENT with edge and cost. If not implemented,
+	// the `generic` or `generic0` implementation is used instead.
+	// The `Consistent` test function should be used to check compliance.
+	//
+	//  • degree(v) returns the outdegree of vertex v.
+	//
+	//  • visit(v) visits all neighbors w of v for which w ≥ a in
+	//    NUMERICAL ORDER calling do(w, c) for edge (v, w) of cost c.
+	//    If a call to do returns true, visit MUST ABORT the iteration
+	//    and return true; if successful it should return false.
+	//    Precondition: a ≥ 0.
+	//
+	degree func(v int) int
+	visit  func(v int, a int, do func(w int, c int64) (skip bool)) (aborted bool)
+}
+```
+
 ## Testing
 
 ## Optimization
