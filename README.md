@@ -2,7 +2,13 @@
 
 ### Building graphs from functions only
 
-#### Table of contents
+[![Cartesian product](res/petersen2.png)](#table-of-contents)
+
+**The Petersen graph and its complement**,
+*picture from [Wikipedia][wikipetersen2], [CC BY-SA 3.0][ccbysa30].*
+
+
+## Table of contents
 
 [Introduction](#introduction)  
 [API](#api)  
@@ -11,7 +17,7 @@
 [Optimization](#optimization)
 
 
-# Introduction
+## Introduction
 
 This text is about a [Go][golang] tool based entirely on functions –
 the API contains only immutable data types, and the implementation
@@ -30,12 +36,7 @@ There is an online reference for the build tool at
  
 ### Petersen graph
 
-Let's start with an example, the Petersen graph:
-
-![Petersen graph](res/petersen.png)
-
-*Picture from [Wikipedia][wikipetersen], [CC BY-SA 3.0][ccbysa30].*
-
+Let's start with an example, the Petersen graph.
 To describe this graph in a conventional graph library,
 you would typically need to enumerate the edges
 
@@ -49,6 +50,10 @@ her answer would clearly be very different. Perhaps she would say:
 
 > You get a Petersen graph if you draw a pentagon
 > with a pentagram inside, with five spokes.
+
+![Petersen graph](res/petersen.png)
+
+*Picture from [Wikipedia][wikipetersen], [CC BY-SA 3.0][ccbysa30].*
 
 This [example][petersendoc] from the `graph/build` documentation
 is very close to this mathematical description.
@@ -123,4 +128,5 @@ type Virtual struct {
 [korthaj]: https://github.com/korthaj
 [petersendoc]: https://godoc.org/github.com/yourbasic/graph/build#example-Virtual-Match-Petersen
 [wikipetersen]: https://en.wikipedia.org/wiki/File:Petersen1_tiny.svg
+[wikipetersen2]: https://commons.wikimedia.org/wiki/File:Petersen_graph_complement.svg
 
