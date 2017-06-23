@@ -1,4 +1,4 @@
-# Your basic func [sketch] [![GoDoc](https://godoc.org/github.com/yourbasic/graph/build?status.svg)][graphbuilddoc]
+# Your basic func [![GoDoc](https://godoc.org/github.com/yourbasic/graph/build?status.svg)][graphbuilddoc]
 
 ### Building graphs from functions only
 
@@ -92,10 +92,8 @@ which the anonymous function returns true.
 
 ## Implementation
 
-The main data type is a struct with five functions.
-
-Discussion...
-
+The source code discussed in this section comes from the file [build.go][build].
+Let's start by looking at the main data type, a struct with five functions.
 
 ```go
 type Virtual struct {
@@ -134,13 +132,21 @@ type Virtual struct {
 
 ### Cycle graphs
 
-Let's look at a very simple example, how to implement a **cycle graph**,
-a graph of order *n* with the edges  
-{0, 1}, {1, 2}, {2, 3},... , {*n*-1, 0}.
+Let's look at a very simple example, how to implement **cycle graphs**.
+A cycle graph of order *n* contains the edges  
+{0, 1}, {1, 2}, {2, 3},… , {*n*-1, 0}.
+
+![Cycle graph](res/cycle.png)
+
+**Cycle graph of order 6**, *picture from [Wikipedia][wikicycle].*
 
 For a minimal effort implementation of this class of graphs,
-only the `edge` function needs to be defined –
-`generic0` returns a standard implementation for the other functions.
+we can write an `edge` function and use the generic implementation
+`generic0` to fill in standard implementations of the other functions
+in the `Virtual` struct.
+
+In the following code, `g` is a virtual circle graph of order *n*
+with edge costs equal to zero.
 
 ```go
 g := generic0(n, func(v, w int) (edge bool) {
@@ -152,14 +158,18 @@ g := generic0(n, func(v, w int) (edge bool) {
 })
 ```
 
-In this case, it's trivial to compute the degree more efficiently.
+The generic implementation of the `degree` function iterates
+over the *n* potential neighbors and calls the `edge`function
+for each one to check if it really is a neighbor.
+In this case, it's trivial to compute the degree more efficiently:
 
 ```go
 g.degree = func(v int) int { return 2 }
 ```
 
-It's also easy to define a much more efficient `visit` function.
-For example like this.
+The generic implementation of the `visit` function also visits
+all potential neighbors. 
+This can of course be done much more efficiently:
 
 ```go
 g.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
@@ -181,6 +191,43 @@ g.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
 }
 ```
 
+### Complement
+
+Operators on virtual graphs are typically more complicated,
+but they can also be defined using the very same pattern.
+Here is a code snippet from the implementation of the `Complement` function.
+
+```go
+func (g *Virtual) Complement() *Virtual {
+	res := generic0(n, func(v, w int) (edge bool) {
+		return v != w && !g.edge(v, w)
+	})
+
+	res.degree = func(v int) int { return n - 1 - g.degree(v) }
+
+	res.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
+		prev := a
+		if g.visit(v, a, func(w0 int, _ int64) (skip bool) {
+			for w := prev; w < w0; w++ {
+				if v != w && do(w, 0) {
+					return true
+				}
+			}
+			prev = w0 + 1
+			return
+		}) {
+			return true
+		}
+		for w := prev; w < n; w++ {
+			if v != w && do(w, 0) {
+				return true
+			}
+		}
+		return
+	}
+	return res
+}
+```
 
 ## Testing
 
@@ -253,6 +300,7 @@ introduced in Go 1.9 boosts the performance of this library with 10-20%.
 
 *This work is licensed under a [Creative Commons Attribution 3.0 Unported License][ccby30].*
 
+[build]: https://github.com/yourbasic/graph/blob/master/build/build.go
 [ccby30]: https://creativecommons.org/licenses/by/3.0/
 [ccbysa30]: https://creativecommons.org/licenses/by-sa/3.0/deed.en
 [func]: https://github.com/yourbasic/func
@@ -265,6 +313,7 @@ introduced in Go 1.9 boosts the performance of this library with 10-20%.
 [graphbuilddoc]: https://godoc.org/github.com/yourbasic/graph/build
 [korthaj]: https://github.com/korthaj
 [petersendoc]: https://godoc.org/github.com/yourbasic/graph/build#example-Virtual-Match-Petersen
+[wikicycle]: https://en.wikipedia.org/wiki/File:Undirected_6_cycle.svg
 [wikipetersen]: https://en.wikipedia.org/wiki/File:Petersen1_tiny.svg
 [wikipetersen2]: https://commons.wikimedia.org/wiki/File:Petersen_graph_complement.svg
 
