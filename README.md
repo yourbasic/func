@@ -10,10 +10,10 @@
 
 ## Table of contents
 
-- [x] [Introduction](#introduction)
-- [x] [Implementation](#implementation)
-- [ ] [Testing](#testing)
-- [x] [Performance](#performance)
+[Introduction](#introduction)  
+[Implementation](#implementation)  
+[Testing](#testing)  
+[Performance](#performance)
 
 
 ## Introduction
@@ -209,7 +209,7 @@ are connected by an edge whenever both of the edges (v1, w1) and (v2, w2)
 exist in the original graphs.
 
 In the new graph, vertex (v1, v2) gets index n⋅v1 + v2,
-where n = g2.Order(), and index i corresponds to the vertice (i/n, i%n).
+where n = g2.Order(), and index i corresponds to the vertex (i/n, i%n).
 
 ```go
 func (g1 *Virtual) Tensor(g2 *Virtual) *Virtual {
@@ -248,22 +248,27 @@ func (g1 *Virtual) Tensor(g2 *Virtual) *Virtual {
 
 ## Testing
 
-As usual, we need to check that the function calls
-`Cycle(n)` produce the expected result.
-However, checking for consistency can be fully automated:
+Testing pure functions is typically straightforward –
+in this case it's also a pure pleasure.
+
+As always we need to check that the function calls
+produce the expected result, but the rest of the testing procedure
+can be fully automated. Given the `edge` and `cost` functions,
+the behavior of `degree` and `visit` are fully determined and
+can be automatically checked; it also works in reverse.
+
+This is a blessing since the implementations tend to be quite different
+and often either `edge` or `visit` is considerably easier to implement
+than the other.
+
+To test the `Cycle` function we simply need to check its output
+and call the automated consistency test:
 
 ```go
 for n := 0; n < 5; n++ {
 	Consistent("Cycle", t, Cycle(n))
 }
 ```
-
-The `Consistent` function checks that the `degree` and `visit` functions
-are consistent with `edge` and `cost`, and that `visit` obeys its contract.
-
-This is nice, since the two definitions tend to be quite different and
-often one of the two is considerably easier to implement.
-
 
 ## Performance
 
