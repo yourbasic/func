@@ -216,13 +216,13 @@ must visit all potenential neighbors during iteration.
 
 ### Caching
 
-Caching can give large performance improvement but may be hard to automate.
+Caching can give large performance improvements but may be hard to automate.
 When and what to cache depends on many factors, including the actual data,
 hardware, and implementation.
 
 Additionally, any graph, or part of a graph, which is described
 by a filter function function cannot be cached since we don't
-know if the user-provided functions are pure –
+know if the user-defined functions are pure –
 they may return different results given the same argument.
 
 The solution is to provide a function which turns on caching
@@ -245,8 +245,8 @@ that are represented by more traditional data structures.
 
 In a library built entirely out of functions,
 the cost of functions calls can be noticeable.
-In fact, the more aggressive [inlining strategies][goinline]
-introduced in Go 1.9 give a 10-20% performance boost to this library.
+In fact, the more aggressive [inlining strategy][goinline]
+introduced in Go 1.9 boosts the performance of this library with 10-20%.
 
 
 #### Stefan Nilsson — [korthaj][korthaj]
