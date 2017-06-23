@@ -10,10 +10,10 @@
 
 ## Table of contents
 
-[Introduction](#introduction)  
-[Implementation](#implementation)  
-[Testing](#testing)  
-[Optimization](#optimization)
+- [x] [Introduction](#introduction)
+- [ ] [Implementation](#implementation)
+- [ ] [Testing](#testing)
+- [ ] [Performance](#performance)
 
 
 ## Introduction
@@ -30,8 +30,7 @@ The tool is part of a larger library of generic graph algorithms:
 - the package [graph][graph] contains the basic graph library and
 - the subpackage [graph/build][graphbuild] is the tool for building virtual graphs.
 
-There is an online reference for the build tool at
-[godoc.org][graphbuilddoc].
+There is an online reference for the build tool at [godoc.org][graphbuilddoc].
 
 
 ### Petersen graph
@@ -65,13 +64,15 @@ pentagram := pentagon.Complement()
 petersen := pentagon.Match(pentagram, build.AllEdges())
 ```
 
-As you can see, virtual graphs can be constructed by **composing** 
-a set of **standard graphs**.
+In fact, the functions implement basic concepts in graph theory:
+we start with a **cycle graph** of order 5,
+compute its **complement**, and then combine these two graphs
+by **matching** their vertices.
 
 ### Generic graphs
 
-It's also possible to define a virtual graphs by
-writing a **function** that describes its **edge set**.
+It's also possible to define new graphs by
+writing **functions** that describe their **edge sets**.
 The code in the following [example][genericdoc]
 builds a directed graph containing all edges (*v*, *w*)
 for which *v* is odd and *w* even.
@@ -82,18 +83,11 @@ g := build.Generic(10, func(v, w int) bool {
     // Include all edges with v odd and w even.
     return v%2 == 1 && w%2 == 0
 })
-
-// In a topological ordering of this graph,
-// odd numbered vertices must come before even.
-order, acyclic := graph.TopSort(g)
-fmt.Println("Acyclic:", acyclic)
-fmt.Println(order)
 ```
 
-Output:
-
-	Acyclic: true
-	[1 3 5 7 9 0 2 4 6 8]
+The `build.Generic` function returns a virtual graph with 10 vertices;
+its edge set consists of all edges (v, w), v ≠ w, for 
+which the anonymous function returns true.
 
 
 ## Implementation
@@ -144,7 +138,7 @@ Let's look at a very simple example, how to implement a **cycle graph**,
 a graph of order *n* with the edges  
 {0, 1}, {1, 2}, {2, 3},... , {*n*-1, 0}.
 
-For a minimal effort implementation of this class of graphes,
+For a minimal effort implementation of this class of graphs,
 only the `edge` function needs to be defined –
 `generic0` returns a standard implementation for the other functions.
 
@@ -207,7 +201,7 @@ This is nice, since the two definitions tend to be quite different and
 often one of the two is considerably easier to implement.
 
 
-## Optimization
+## Performance
 
 Caching. Hard to automate. As always, it's hard to know what to cache.
 In this case, any graph, or part of graph, which is described by `edge`
