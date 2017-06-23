@@ -191,43 +191,60 @@ g.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
 }
 ```
 
-### Complement
+### Tensor product
 
 Operators on virtual graphs are typically more complicated,
-but they can also be defined using the very same pattern.
-Here is a code snippet from the implementation of the `Complement` function.
+but they can be defined using the very same pattern.
+Here is an example from the implementation of a function
+that computes the **tensor product** of two graphs.
+
+![Tensor product](res/tensor.png)
+
+**Tensor product**, *picture from [Wikipedia][wikitensor].*
+
+The tensor product of g1 and g2 is a graph whose vertices
+correspond to ordered pairs (v1, v2), where v1 and v2 are vertices
+in g1 and g2, respectively. The vertices (v1, v2) and (w1, w2)
+are connected by an edge whenever both of the edges (v1, w1) and (v2, w2)
+exist in the original graphs.
+
+In the new graph, vertex (v1, v2) gets index n⋅v1 + v2,
+where n = g2.Order(), and index i corresponds to the vertice (i/n, i%n).
 
 ```go
-func (g *Virtual) Complement() *Virtual {
-	res := generic0(n, func(v, w int) (edge bool) {
-		return v != w && !g.edge(v, w)
+func (g1 *Virtual) Tensor(g2 *Virtual) *Virtual {
+	m, n := g1.Order(), g2.Order()
+
+	g := generic0(m*n, func(v, w int) (edge bool) {
+		v1, v2 := v/n, v%n
+		w1, w2 := w/n, w%n
+		return g1.Edge(v1, w1) && g2.Edge(v2, w2)
 	})
 
-	res.degree = func(v int) int { return n - 1 - g.degree(v) }
-
-	res.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
-		prev := a
-		if g.visit(v, a, func(w0 int, _ int64) (skip bool) {
-			for w := prev; w < w0; w++ {
-				if v != w && do(w, 0) {
-					return true
-				}
-			}
-			prev = w0 + 1
-			return
-		}) {
-			return true
-		}
-		for w := prev; w < n; w++ {
-			if v != w && do(w, 0) {
-				return true
-			}
-		}
-		return
+	g.degree = func(v int) (deg int) {
+		v1, v2 := v/n, v%n
+		return g1.degree(v1) * g2.degree(v2)
 	}
-	return res
+
+	g.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
+		v1, v2 := v/n, v%n
+		a1, a2 := a/n, a%n
+		return g1.visit(v1, a1, func(w1 int, c int64) (skip bool) {
+			if w1 == a1 {
+				return g2.visit(v2, a2, func(w2 int, c int64) (skip bool) {
+					return do(n*w1+w2, 0)
+				})
+			}
+			return g2.visit(v2, 0, func(w2 int, c int64) (skip bool) {
+				return do(n*w1+w2, 0)
+			})
+		})
+	}
+	return g
 }
 ```
+
+*Code from* **[tensor.go][tensor]**
 
 ## Testing
 
@@ -313,7 +330,9 @@ introduced in Go 1.9 boosts the performance of this library with 10-20%.
 [graphbuilddoc]: https://godoc.org/github.com/yourbasic/graph/build
 [korthaj]: https://github.com/korthaj
 [petersendoc]: https://godoc.org/github.com/yourbasic/graph/build#example-Virtual-Match-Petersen
+[tensor]: https://github.com/yourbasic/graph/blob/master/build/tensor.go
 [wikicycle]: https://en.wikipedia.org/wiki/File:Undirected_6_cycle.svg
 [wikipetersen]: https://en.wikipedia.org/wiki/File:Petersen1_tiny.svg
 [wikipetersen2]: https://commons.wikimedia.org/wiki/File:Petersen_graph_complement.svg
+[wikitensor]: https://en.wikipedia.org/wiki/File:Graph-tensor-product.svg
 
