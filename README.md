@@ -55,7 +55,7 @@ her answer would clearly be very different. Perhaps she would say:
 *Picture from [Wikipedia][wikipetersen], [CC BY-SA 3.0][ccbysa30].*
 
 This [example][petersendoc] from the `graph/build` documentation
-is very close to this mathematical description.
+corresponds to the mathematical description.
 
 ```go
 // Build a Petersen graph.
@@ -64,17 +64,18 @@ pentagram := pentagon.Complement()
 petersen := pentagon.Match(pentagram, build.AllEdges())
 ```
 
-As you can see, the functions implement basic concepts in graph theory:
+As you can see, the `Cycle`, `Complement` and `Match` functions
+implement basic concepts in graph theory:
 we start with a **cycle graph** of order 5,
 compute its **complement**, and then combine these two graphs
 by **matching** their vertices.
 
 ### A generic graph
 
-It's also possible to define new graphs by
-writing **functions** that describe their **edge sets**.
-The code in the following [example][genericdoc]
-builds a directed graph containing all edges (*v*, *w*)
+It's also possible to define a new graph by writing
+a **function** that describes the **edge set** of the graph.
+This [code example][genericdoc]
+shows how to build a directed graph containing all edges (*v*, *w*)
 for which *v* is odd and *w* even.
 
 ```go
@@ -140,7 +141,7 @@ A cycle graph of order *n* contains the edges
 
 **Cycle graph of order 6**, *picture from [Wikipedia][wikicycle].*
 
-For a minimal effort implementation of this class of graphs,
+For a basic implementation of this class of graphs,
 we can write an `edge` function and use the generic implementation
 `generic0` to fill in standard implementations of the other functions
 in the `Virtual` struct.
@@ -193,7 +194,7 @@ g.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
 
 ### Tensor product
 
-Operators on virtual graphs are typically more complicated,
+Operators on virtual graphs are typically more complicated to implement,
 but they can be defined using the very same pattern.
 Here is an example from the implementation of a function
 that computes the **tensor product** of two graphs.
@@ -276,11 +277,12 @@ for n := 0; n < 5; n++ {
 
 The implementation of neigbor iteration is crucial for the performance
 of any graph library.
-Therefore all of the predefined building blocks and operations
-implement the `visit`function in time proportional to the number of neighbors.
+Therefore all predefined building blocks and operations
+try to implement the `visit` function in time proportional to
+the actual number of neighbors.
 
 However, with filter functions this is not possible.
-Graphs built by the `Generic` function
+In particular, graphs built by the `Generic` function
 must visit all potenential neighbors during iteration.
 
 ### Caching
@@ -294,7 +296,7 @@ by a filter function function cannot be cached since we don't
 know if the user-defined functions are pure –
 they may return different results given the same argument.
 
-The solution is to provide a function which turns on caching
+The solution is a function which activates caching
 for a specified component:
 
 ```go
