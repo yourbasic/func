@@ -13,7 +13,7 @@
 - [x] [Introduction](#introduction)
 - [ ] [Implementation](#implementation)
 - [ ] [Testing](#testing)
-- [ ] [Performance](#performance)
+- [x] [Performance](#performance)
 
 
 ## Introduction
@@ -233,9 +233,15 @@ for a specified component:
 // all basic operations. It uses space proportional to the size of the graph.
 func Specific(g graph.Iterator) *Virtual
 ```
-Not only can `Specific` be used to cache any component.
-It also solves another problem: importing graphs that are represented
-by more traditional data structures.
+Not only can `Specific` be used to cache selected components,
+it can also be employed to import graphs
+that are represented by more traditional data structures.
+
+The implementation uses lists to associate each vertex
+in the graph with its adjacent vertices.
+This makes for fast and predictable iteration:
+the `visit` method produces its elements
+by reading from a fixed sorted precomputed list. 
 
 ### Function inlining
 
