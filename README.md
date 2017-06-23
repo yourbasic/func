@@ -203,12 +203,15 @@ often one of the two is considerably easier to implement.
 
 ## Performance
 
-The performance of the `visit` function is crucial.
-In fact, all of the predefined building blocks and operations
-implement this function in time proportional to the number of neighbors.
+### Iteration
+
+The implementation of neigbor iteration is crucial for the performance
+of any graph library.
+Therefore all of the predefined building blocks and operations
+implement the `visit`function in time proportional to the number of neighbors.
 
 However, with filter functions this is not possible.
-In particular, note that graphs built by the `Generic` function
+Graphs built by the `Generic` function
 must visit all potenential neighbors during iteration.
 
 ### Caching
@@ -234,6 +237,13 @@ Not only can `Specific` be used to cache any component.
 It also solves another problem: importing graphs that are represented
 by more traditional data structures.
 
+### Function inlining
+
+In a library built entirely out of functions,
+the cost of functions calls can be noticeable.
+In fact, the more aggressive [inlining strategies][goinline]
+introduced in Go 1.9 give a 10-20% performance boost to this library.
+
 
 #### Stefan Nilsson — [korthaj][korthaj]
 
@@ -243,6 +253,7 @@ by more traditional data structures.
 [ccbysa30]: https://creativecommons.org/licenses/by-sa/3.0/deed.en
 [func]: https://github.com/yourbasic/func
 [genericdoc]: https://godoc.org/github.com/yourbasic/graph/build#example-Generic
+[goinline]: https://github.com/golang/proposal/blob/master/design/19348-midstack-inlining.md
 [golang]: https://golang.org
 [graph]: https://github.com/yourbasic/graph
 [graphbuild]: https://github.com/yourbasic/graph/tree/master/build
