@@ -216,14 +216,14 @@ must visit all potenential neighbors during iteration.
 
 ### Caching
 
-Caching can give large performance improvement but is hard to automate.
+Caching can give large performance improvement but may be hard to automate.
 When and what to cache depends on many factors, including the actual data,
 hardware, and implementation.
 
-Additionally, any graph, or part of graph, which is described
+Additionally, any graph, or part of a graph, which is described
 by a filter function function cannot be cached since we don't
 know if the user-provided functions are pure –
-the may return different results given the same argument.
+they may return different results given the same argument.
 
 The solution is to provide a function which turns on caching
 for a specified component:
@@ -233,15 +233,13 @@ for a specified component:
 // all basic operations. It uses space proportional to the size of the graph.
 func Specific(g graph.Iterator) *Virtual
 ```
+
+The implementation uses fixed precomputed lists to associate
+each vertex in the graph with its neigbors.
+
 Not only can `Specific` be used to cache selected components,
 it can also be employed to import graphs
 that are represented by more traditional data structures.
-
-The implementation uses lists to associate each vertex
-in the graph with its adjacent vertices.
-This makes for fast and predictable iteration:
-the `visit` method produces its elements
-by reading from a fixed sorted precomputed list. 
 
 ### Function inlining
 
