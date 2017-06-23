@@ -1,4 +1,4 @@
-# Your basic func [sketch]
+# Your basic func [sketch] [![GoDoc](https://godoc.org/github.com/yourbasic/graph/build?status.svg)][graphbuilddoc]
 
 ### Building graphs from functions only
 
