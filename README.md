@@ -160,7 +160,7 @@ g := generic0(n, func(v, w int) (edge bool) {
 ```
 
 The generic implementation of the `degree` function iterates
-over the *n* potential neighbors and calls the `edge`function
+over the *n* potential neighbors and calls the `edge` function
 for each one to check if it really is a neighbor.
 In this case, it's trivial to compute the degree more efficiently:
 
