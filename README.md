@@ -33,7 +33,7 @@ The tool is part of a larger library of generic graph algorithms:
 There is an online reference for the build tool at [godoc.org][graphbuilddoc].
 
 
-### Petersen graph
+### The Petersen graph
 
 Let's start with an example, the Petersen graph.
 To describe this graph in a conventional graph library,
@@ -64,12 +64,12 @@ pentagram := pentagon.Complement()
 petersen := pentagon.Match(pentagram, build.AllEdges())
 ```
 
-In fact, the functions implement basic concepts in graph theory:
+As you can see, the functions implement basic concepts in graph theory:
 we start with a **cycle graph** of order 5,
 compute its **complement**, and then combine these two graphs
 by **matching** their vertices.
 
-### Generic graphs
+### A generic graph
 
 It's also possible to define new graphs by
 writing **functions** that describe their **edge sets**.
@@ -203,21 +203,35 @@ often one of the two is considerably easier to implement.
 
 ## Performance
 
-Caching. Hard to automate. As always, it's hard to know what to cache.
-In this case, any graph, or part of graph, which is described by `edge`
-functions cannot be cached, since we can't assume to that user-provided
-functions are pure – the may return different results given the same argument.
+The performance of the `visit` function is crucial.
+In fact, all of the predefined building blocks and operations
+implement this function in time proportional to the number of neighbors.
 
-The solution: the `Specific` function.
+However, with filter functions this is not possible.
+In particular, note that graphs built by the `Generic` function
+must visit all potenential neighbors during iteration.
+
+### Caching
+
+Caching can give large performance improvement but is hard to automate.
+When and what to cache depends on many factors, including the actual data,
+hardware, and implementation.
+
+Additionally, any graph, or part of graph, which is described
+by a filter function function cannot be cached since we don't
+know if the user-provided functions are pure –
+the may return different results given the same argument.
+
+The solution is to provide a function which turns on caching
+for a specified component:
 
 ```go
 // Specific returns a cached copy of g with constant time performance for
 // all basic operations. It uses space proportional to the size of the graph.
 func Specific(g graph.Iterator) *Virtual
 ```
-
-It can be used to cache any component of a virtual graph.
-It also solves a second problem, importing graphs that are represented
+Not only can `Specific` be used to cache any component.
+It also solves another problem: importing graphs that are represented
 by more traditional data structures.
 
 
