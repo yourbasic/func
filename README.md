@@ -11,7 +11,7 @@
 ## Table of contents
 
 - [x] [Introduction](#introduction)
-- [ ] [Implementation](#implementation)
+- [x] [Implementation](#implementation)
 - [ ] [Testing](#testing)
 - [x] [Performance](#performance)
 
@@ -92,7 +92,6 @@ which the anonymous function returns true.
 
 ## Implementation
 
-The source code discussed in this section comes from the file [build.go][build].
 Let's start by looking at the main data type, a struct with five functions.
 
 ```go
@@ -129,10 +128,11 @@ type Virtual struct {
 	visit  func(v int, a int, do func(w int, c int64) (skip bool)) (aborted bool)
 }
 ```
+*Code from* **[build.go][build]**
 
 ### Cycle graphs
 
-Let's look at a very simple example, how to implement **cycle graphs**.
+As a simple example, here's how to implement **cycle graphs**.
 A cycle graph of order *n* contains the edges  
 {0, 1}, {1, 2}, {2, 3},… , {*n*-1, 0}.
 
