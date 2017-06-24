@@ -165,6 +165,7 @@ for each one to check if it really is a neighbor.
 In this case, it's trivial to compute the degree more efficiently:
 
 ```go
+// Precondition : n ≥ 3.
 g.degree = func(v int) int { return 2 }
 ```
 
@@ -173,6 +174,7 @@ all potential neighbors.
 This can of course be done much more efficiently:
 
 ```go
+// Precondition : n ≥ 3.
 g.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
 	var w [2]int
 	switch v {
