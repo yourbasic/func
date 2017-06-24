@@ -193,6 +193,7 @@ g.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
 	return
 }
 ```
+*Code from* **[cycle.go][cycle]**
 
 ### Tensor product
 
@@ -329,6 +330,7 @@ introduced in Go 1.9 boosts the performance of this library with 10-20%.
 [build]: https://github.com/yourbasic/graph/blob/master/build/build.go
 [ccby30]: https://creativecommons.org/licenses/by/3.0/
 [ccbysa30]: https://creativecommons.org/licenses/by-sa/3.0/deed.en
+[cycle]: https://github.com/yourbasic/graph/blob/master/build/cycle.go
 [func]: https://github.com/yourbasic/func
 [genericdoc]: https://godoc.org/github.com/yourbasic/graph/build#example-Generic
 [goinline]: https://github.com/golang/proposal/blob/master/design/19348-midstack-inlining.md
