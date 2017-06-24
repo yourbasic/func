@@ -1,14 +1,9 @@
 # Your basic func [![GoDoc](https://godoc.org/github.com/yourbasic/graph/build?status.svg)][graphbuilddoc]
 
-### Building graphs from functions only
-
 [![Cartesian product](res/petersen2.png)](#introduction)
 
 **The Petersen graph and its complement**,
 *picture from [Wikipedia][wikipetersen2], [CC BY-SA 3.0][ccbysa30].*
-
-
-## Introduction
 
 This text is about the implementation of a Go tool based entirely on functions –
 the API contains only immutable data types, and the code
