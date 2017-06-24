@@ -2,18 +2,10 @@
 
 ### Building graphs from functions only
 
-[![Cartesian product](res/petersen2.png)](#table-of-contents)
+[![Cartesian product](res/petersen2.png)](#introduction)
 
 **The Petersen graph and its complement**,
 *picture from [Wikipedia][wikipetersen2], [CC BY-SA 3.0][ccbysa30].*
-
-
-## Table of contents
-
-[Introduction](#introduction)  
-[Implementation](#implementation)  
-[Testing](#testing)  
-[Performance](#performance)
 
 
 ## Introduction
