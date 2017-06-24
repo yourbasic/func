@@ -199,8 +199,7 @@ g.visit = func(v int, a int, do func(w int, c int64) bool) (aborted bool) {
 
 Operators on virtual graphs are typically more complicated to implement,
 but they can be defined using the very same pattern.
-Here is an example from the implementation of a function
-that computes the **tensor product** of two graphs.
+Here is an example showing how to implement the **tensor product** of two graphs.
 
 ![Tensor product](res/tensor.png)
 
