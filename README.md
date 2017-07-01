@@ -1,6 +1,6 @@
 # Your basic func [![GoDoc](https://godoc.org/github.com/yourbasic/graph/build?status.svg)][graphbuilddoc]
 
-### Offbeat functional programming in Go
+### Unexpected functional programming in Go
 
 [![Cartesian product](res/petersen2.png)](#introduction)
 
