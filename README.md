@@ -303,13 +303,6 @@ Not only can `Specific` be used to cache selected components,
 it can also be employed to import graphs
 that are represented by more traditional data structures.
 
-### Function inlining
-
-In a library built entirely out of functions,
-the cost of functions calls can be noticeable.
-In fact, the more aggressive [inlining strategy][goinline]
-introduced in Go 1.9 boosts the performance of this library with 10-20%.
-
 
 #### Stefan Nilsson — [korthaj][korthaj]
 
